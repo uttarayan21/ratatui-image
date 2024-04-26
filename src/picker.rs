@@ -177,7 +177,7 @@ pub fn font_size(winsize: Winsize) -> Result<FontSize> {
         ws_row: rows,
     } = winsize;
     if x == 0 || y == 0 || cols == 0 || rows == 0 {
-        return Err(String::from("font_size zero value").into());
+        return Err("font_size zero value".into());
     }
     Ok((x / cols, y / rows))
 }

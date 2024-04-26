@@ -36,6 +36,7 @@ rustix = { version = "^0.38.4", optional = true, features = ["stdio", "termios",
 base64 = { version = "^0.21.2" }
 rand = { version = "0.8.5" }
 ratatui = { version = ">=0.23", default-features = false, features = [] }
+thiserror = "1.0.59"
 
 [[bin]]
 name = "ratatui-image"
