@@ -91,7 +91,7 @@
 //! # Features
 //! * `rustix` (default) enables much better guessing of graphics protocols with `rustix::termios::tcgetattr`.
 //! * `crossterm` or `termion` should match your ratatui backend. `termwiz` is available, but not
-//! working correctly with ratatu-image.
+//! working correctly with ratati-image.
 //! * `serde` for `#[derive]`s on [picker::ProtocolType] for convenience, because it might be
 //! useful to save it in some user configuration.
 //! * `image-defaults` (default) just enables `image/defaults` (`image` has `default-features =
