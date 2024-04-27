@@ -19,7 +19,7 @@ use ratatui::{
 };
 use ratatui_image::{
     picker::Picker,
-    protocol::{ImageSource, StatefulProtocol},
+    protocol::{ImageSource, StatefulBlock, StatefulProtocol},
     Resize, StatefulImage,
 };
 
@@ -27,7 +27,7 @@ struct App {
     pub filename: String,
     pub picker: Picker,
     pub image_source: ImageSource,
-    pub image_state: Box<dyn StatefulProtocol>,
+    pub image_state: StatefulBlock,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

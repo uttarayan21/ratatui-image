@@ -29,7 +29,7 @@
 //!
 //! struct App {
 //!     // We need to hold the render state.
-//!     image: Box<dyn StatefulProtocol>,
+//!     image: StatefulBlock,
 //! }
 //!
 //! fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -166,7 +166,7 @@ impl<'a> Widget for Image<'a> {
 /// # use ratatui::{backend::Backend, terminal::Frame};
 /// # use ratatui_image::{Resize, StatefulImage, protocol::{StatefulProtocol}};
 /// struct App {
-///     image_state: Box<dyn StatefulProtocol>,
+///     image_state: StatefulBlock,
 /// }
 /// fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
 ///     let image = StatefulImage::new(None).resize(Resize::Crop);
@@ -196,7 +196,7 @@ impl StatefulImage {
 }
 
 impl StatefulWidget for StatefulImage {
-    type State = Box<dyn StatefulProtocol>;
+    type State = protocol::StatefulBlock;
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
         if area.width == 0 || area.height == 0 {
             return;

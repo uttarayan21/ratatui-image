@@ -119,3 +119,108 @@ impl ImageSource {
         Rect::new(0, 0, width, height)
     }
 }
+
+#[derive(Clone)]
+pub enum StatefulBlock {
+    Halfblocks(halfblocks::StatefulHalfblocks),
+    Sixel(sixel::StatefulSixel),
+    Kitty(kitty::StatefulKitty),
+    Iterm2(iterm2::Iterm2State),
+}
+
+impl StatefulProtocol for StatefulBlock {
+    fn needs_resize(&mut self, resize: &Resize, area: Rect) -> Option<Rect> {
+        match self {
+            StatefulBlock::Halfblocks(hb) => hb.needs_resize(resize, area),
+            StatefulBlock::Sixel(sixel) => sixel.needs_resize(resize, area),
+            StatefulBlock::Kitty(kitty) => kitty.needs_resize(resize, area),
+            StatefulBlock::Iterm2(iterm2) => iterm2.needs_resize(resize, area),
+        }
+    }
+
+    fn resize_encode(&mut self, resize: &Resize, background_color: Option<Rgb<u8>>, area: Rect) {
+        match self {
+            StatefulBlock::Halfblocks(hb) => hb.resize_encode(resize, background_color, area),
+            StatefulBlock::Sixel(sixel) => sixel.resize_encode(resize, background_color, area),
+            StatefulBlock::Kitty(kitty) => kitty.resize_encode(resize, background_color, area),
+            StatefulBlock::Iterm2(iterm2) => iterm2.resize_encode(resize, background_color, area),
+        }
+    }
+
+    fn render(&mut self, area: Rect, buf: &mut Buffer) {
+        match self {
+            StatefulBlock::Halfblocks(hb) => hb.render(area, buf),
+            StatefulBlock::Sixel(sixel) => sixel.render(area, buf),
+            StatefulBlock::Kitty(kitty) => kitty.render(area, buf),
+            StatefulBlock::Iterm2(iterm2) => iterm2.render(area, buf),
+        }
+    }
+}
+impl From<halfblocks::StatefulHalfblocks> for StatefulBlock {
+    fn from(hb: halfblocks::StatefulHalfblocks) -> Self {
+        StatefulBlock::Halfblocks(hb)
+    }
+}
+impl From<sixel::StatefulSixel> for StatefulBlock {
+    fn from(sixel: sixel::StatefulSixel) -> Self {
+        StatefulBlock::Sixel(sixel)
+    }
+}
+impl From<kitty::StatefulKitty> for StatefulBlock {
+    fn from(kitty: kitty::StatefulKitty) -> Self {
+        StatefulBlock::Kitty(kitty)
+    }
+}
+impl From<iterm2::Iterm2State> for StatefulBlock {
+    fn from(iterm2: iterm2::Iterm2State) -> Self {
+        StatefulBlock::Iterm2(iterm2)
+    }
+}
+
+pub enum FixedBlock {
+    Halfblocks(halfblocks::Halfblocks),
+    Sixel(sixel::Sixel),
+    Kitty(kitty::Kitty),
+    Iterm2(iterm2::FixedIterm2),
+}
+
+impl Protocol for FixedBlock {
+    fn render(&self, area: Rect, buf: &mut Buffer) {
+        match self {
+            FixedBlock::Halfblocks(hb) => hb.render(area, buf),
+            FixedBlock::Sixel(sixel) => sixel.render(area, buf),
+            FixedBlock::Kitty(kitty) => kitty.render(area, buf),
+            FixedBlock::Iterm2(iterm2) => iterm2.render(area, buf),
+        }
+    }
+
+    fn rect(&self) -> Rect {
+        match self {
+            FixedBlock::Halfblocks(hb) => hb.rect(),
+            FixedBlock::Sixel(sixel) => sixel.rect(),
+            FixedBlock::Kitty(kitty) => kitty.rect(),
+            FixedBlock::Iterm2(iterm2) => iterm2.rect(),
+        }
+    }
+}
+
+impl From<halfblocks::Halfblocks> for FixedBlock {
+    fn from(hb: halfblocks::Halfblocks) -> Self {
+        FixedBlock::Halfblocks(hb)
+    }
+}
+impl From<sixel::Sixel> for FixedBlock {
+    fn from(sixel: sixel::Sixel) -> Self {
+        FixedBlock::Sixel(sixel)
+    }
+}
+impl From<kitty::Kitty> for FixedBlock {
+    fn from(kitty: kitty::Kitty) -> Self {
+        FixedBlock::Kitty(kitty)
+    }
+}
+impl From<iterm2::FixedIterm2> for FixedBlock {
+    fn from(iterm2: iterm2::FixedIterm2) -> Self {
+        FixedBlock::Iterm2(iterm2)
+    }
+}
